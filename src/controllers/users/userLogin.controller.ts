@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import userLoginService from "../services/user/userLogin.service";
+import { AppError, handleError } from "../../errors/appError";
+import userLoginService from "../../services/user/userLogin.service";
 
 const userLoginController = async (req: Request, res: Response) => {
   try {
@@ -7,10 +8,8 @@ const userLoginController = async (req: Request, res: Response) => {
     const token = await userLoginService({ email, password });
     return res.status(200).send({ token });
   } catch (error) {
-    if (error instanceof Error) {
-      return res
-        .status(403)
-        .send({ error: error.name, message: error.message });
+    if (error instanceof AppError) {
+      handleError(error, res);
     }
   }
 };

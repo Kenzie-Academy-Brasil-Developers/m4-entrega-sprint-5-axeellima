@@ -6,6 +6,7 @@ import {
   JoinColumn,
   OneToMany,
   JoinTable,
+  ManyToOne,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Address } from "./addresses.entity";
@@ -20,39 +21,45 @@ export class Properties {
   @Column("boolean", { default: false })
   sold: boolean;
 
-  @Column("decimal", { nullable: true })
+  @Column("decimal", { nullable: false })
   value: number;
 
-  @Column("int4", { nullable: true })
+  @Column("integer", { nullable: false })
   size: number;
 
-  @Column("date", { nullable: true })
+  @Column("date", { nullable: false })
   createdAt: string;
 
-  @Column("date", { nullable: true })
+  @Column("date", { nullable: false })
   updatedAt: string;
 
-  @OneToOne((type) => Address, (address) => address.id, { nullable: true })
+  @OneToOne((type) => Address, (address) => address.id, {
+    nullable: false,
+  })
   @JoinColumn()
-  address: Address["id"];
+  address: Address;
 
   @OneToMany((type) => Schedule, (schedule) => schedule.property)
-  @JoinTable()
+  @JoinColumn()
   schedules: Schedule;
 
-  @OneToOne((type) => Categories, (category) => category.id)
-  @JoinColumn()
-  category: Categories["id"];
+  @ManyToOne((type) => Categories, (category) => category.properties, {
+    eager: true,
+  })
+  @JoinColumn({ name: "category" })
+  category: Categories;
 
   constructor() {
     if (!this.id) {
       this.id = uuid();
     }
     if (!this.createdAt) {
-      this.createdAt = Date();
+      const newDate = new Date().toDateString();
+      this.createdAt = newDate;
     }
     if (!this.updatedAt) {
-      this.updatedAt = Date();
+      const newDate = new Date().toDateString();
+      this.updatedAt = newDate;
     }
   }
 }

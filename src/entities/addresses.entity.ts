@@ -6,19 +6,19 @@ export class Address {
   @PrimaryColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   district: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   zipCode: string;
 
   @Column()
   number: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   city: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   @Column()
   state: string;
 

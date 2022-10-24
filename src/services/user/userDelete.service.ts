@@ -1,6 +1,7 @@
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import { Response } from "express";
+import { AppError } from "../../errors/appError";
 
 const userDeleteService = async (id: string, res: Response) => {
   const userRepository = AppDataSource.getRepository(User);
@@ -9,7 +10,7 @@ const userDeleteService = async (id: string, res: Response) => {
   const user = users.find((user) => user.id === id);
   if (user) {
     if (user.isActive === false) {
-      throw new Error("Non-active user");
+      throw new AppError(400, "Non-active user");
     }
     await userRepository
       .update({ id }, { isActive: false })

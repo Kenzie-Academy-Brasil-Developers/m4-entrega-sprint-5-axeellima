@@ -1,11 +1,11 @@
 import { userUpdateSchema } from "./../middlewares/validateUpdateUser.middleware";
 import { Router } from "express";
-import userCreateController from "../controllers/userCreate.controller";
-import userDeleteController from "../controllers/userDelete.controller";
-import userListController from "../controllers/userList.controller";
+import userCreateController from "../controllers/users/userCreate.controller";
+import userDeleteController from "../controllers/users/userDelete.controller";
+import userListController from "../controllers/users/userList.controller";
 import authUser from "../middlewares/authUser.middleware";
 import authAdm from "../middlewares/authAdm.middleware";
-import userUpdateController from "../controllers/userUpdate.controller";
+import userUpdateController from "../controllers/users/userUpdate.controller";
 import { validateUpdateUser } from "../middlewares/validateUpdateUser.middleware";
 import authActive from "../middlewares/authActive.middleware";
 

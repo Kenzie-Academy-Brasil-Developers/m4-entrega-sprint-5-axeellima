@@ -5,15 +5,15 @@ services:
     container_name: api
     build: .
     ports:
-      - 3000:3000
+      - 3333:3333
     env_file:
       - .env
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - .:/app
-
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
   db:
     container_name: db
     image: postgres:14-alpine

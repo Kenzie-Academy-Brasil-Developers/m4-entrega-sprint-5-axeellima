@@ -15,21 +15,21 @@ export class Schedule {
   @PrimaryColumn("uuid")
   readonly id: string;
 
-  @Column("date", { nullable: true })
+  @Column("date", { nullable: false })
   date: string;
 
-  @Column("time", { nullable: true })
+  @Column("time", { nullable: false })
   hour: string;
 
   @ManyToOne((type) => Properties, (properties) => properties.schedules, {
     nullable: true,
   })
   @JoinColumn()
-  property: Properties["id"];
+  property: Properties;
 
-  @ManyToOne((type) => User, (user) => user.id, { nullable: true })
+  @ManyToOne((type) => User, (user) => user.id, { nullable: false })
   @JoinColumn()
-  user: User["id"];
+  user: User;
 
   constructor() {
     if (!this.id) {
