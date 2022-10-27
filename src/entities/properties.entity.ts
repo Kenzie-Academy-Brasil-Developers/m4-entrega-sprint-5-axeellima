@@ -39,13 +39,13 @@ export class Properties {
   @JoinColumn()
   address: Address;
 
-  @OneToMany((type) => Schedule, (schedule) => schedule.property)
-  @JoinColumn()
-  schedules: Schedule;
-
-  @ManyToOne((type) => Categories, (category) => category.properties, {
+  @OneToMany((type) => Schedule, (schedule) => schedule.property, {
     eager: true,
   })
+  @JoinTable()
+  schedules: Schedule[];
+
+  @ManyToOne((type) => Categories, (category) => category.properties)
   @JoinColumn({ name: "category" })
   category: Categories;
 

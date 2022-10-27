@@ -11,22 +11,33 @@ const scheduleCreateService = async ({
   date,
   hour,
 }: IScheduleRequest) => {
-  const newDate = new Date(date).getDay();
-  if (newDate === 0 || newDate === 6) {
+  const propertyRepository = AppDataSource.getRepository(Properties);
+  const validateProperty = await propertyRepository.findOne({
+    where: {
+      id: propertyId,
+    },
+  });
+
+  if (!validateProperty) {
+    throw new AppError(404, "Property not found");
+  }
+
+  const newDate = new Date(date);
+  const getDate = newDate.getDay();
+  if (getDate === 0 || getDate === 6) {
     throw new AppError(400, "Outside opening hours");
   }
   const newHour = new Date(date + " " + hour).getHours();
-  if (newHour < 8 || newHour > 18) {
+  if (newHour < 8 || newHour >= 18) {
     throw new AppError(400, "Outside opening hours");
   }
-  console.log(newDate);
-  console.log(newHour);
   const scheduleRepository = AppDataSource.getRepository(Schedule);
   const scheduleList = await scheduleRepository.find();
-  const validateSchedule = scheduleList.findIndex(
-    (schedule) => schedule.date === date && schedule.hour === hour
+  const validateSchedule = scheduleList.find(
+    (schedule) =>
+      schedule.date === newDate.toLocaleDateString() && schedule.hour === hour
   );
-  if (validateSchedule !== -1) {
+  if (validateSchedule) {
     throw new AppError(400, "appointment already made");
   }
 
@@ -38,17 +49,8 @@ const scheduleCreateService = async ({
     throw new AppError(404, "User not found");
   }
 
-  const propertyRepository = AppDataSource.getRepository(Properties);
-  const propertiesList = await propertyRepository.find();
-  const validateProperty = propertiesList.find((property) => {
-    return property.id === propertyId;
-  });
-  if (validateProperty === undefined) {
-    throw new AppError(404, "Property not found");
-  }
-
   const newSchedule = new Schedule();
-  newSchedule.date = date;
+  newSchedule.date = newDate.toLocaleDateString();
   newSchedule.hour = hour;
   newSchedule.property = validateProperty;
   newSchedule.user = validateUser;
@@ -58,11 +60,7 @@ const scheduleCreateService = async ({
 
   return {
     message: "Schedule created",
-    schedule: {
-      id: newSchedule.id,
-      date: newSchedule.date,
-      hour: newSchedule.hour,
-    },
+    schedule: newSchedule,
   };
 };
 export default scheduleCreateService;

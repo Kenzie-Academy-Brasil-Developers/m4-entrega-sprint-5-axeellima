@@ -9,8 +9,11 @@ const userUpdateService = async (
   { name, email, password }: IUserUpdate
 ) => {
   const userRepository = AppDataSource.getRepository(User);
-  const users = await userRepository.find();
-  const user = users.find((user) => user.id === id);
+  const user = await userRepository.findOne({
+    where: {
+      id: id,
+    },
+  });
   if (!user) {
     throw new AppError(404, "User not exists!");
   }
@@ -33,8 +36,11 @@ const userUpdateService = async (
   }
   await userRepository.update({ id }, { name, email });
 
-  const newUsers = await userRepository.find();
-  const newUser = newUsers.find((user) => user.id === id);
+  const newUser = await userRepository.findOne({
+    where: {
+      id: id,
+    },
+  });
 
   return {
     message: "Updated user",

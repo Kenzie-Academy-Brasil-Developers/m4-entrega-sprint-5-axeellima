@@ -7,7 +7,7 @@ import authActive from "../middlewares/authActive.middleware";
 
 export const schedulesRoutes = Router();
 
-schedulesRoutes.post("", schedulesCreateController);
+schedulesRoutes.post("", authUser, schedulesCreateController);
 
 schedulesRoutes.get(
   "/properties/:id",

@@ -1,3 +1,4 @@
+import { AppError } from "./../errors/appError";
 import { IUserUpdate } from "./../interfaces/users/index";
 import { Request, Response, NextFunction } from "express";
 import * as yup from "yup";

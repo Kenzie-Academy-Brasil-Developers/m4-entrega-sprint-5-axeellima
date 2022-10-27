@@ -12,7 +12,7 @@ import { User } from "./user.entity";
 
 @Entity()
 export class Schedule {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn("uuid", { nullable: false })
   readonly id: string;
 
   @Column("date", { nullable: false })
@@ -27,7 +27,10 @@ export class Schedule {
   @JoinColumn()
   property: Properties;
 
-  @ManyToOne((type) => User, (user) => user.id, { nullable: false })
+  @ManyToOne((type) => User, (user) => user.id, {
+    eager: true,
+    nullable: false,
+  })
   @JoinColumn()
   user: User;
 

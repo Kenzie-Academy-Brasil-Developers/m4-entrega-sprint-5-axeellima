@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const authAdm = (req: Request, res: Response, next: NextFunction) => {
+const authAdm = async (req: Request, res: Response, next: NextFunction) => {
   const isAdm = req.user.isAdm;
 
   if (isAdm !== true) {
